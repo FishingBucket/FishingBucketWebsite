@@ -1,0 +1,31 @@
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-element {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.filtering {
+    display: grid;
+    gap: 5px;
+    width: 100%;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-content: left;
+}
+
+.filtering label {
+    text-align: right;
+}
+
+.subfilter {
+    background: var(--background-secondary);
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+}

@@ -1,10 +1,10 @@
 <script lang="ts">
     import { CircleChevronRight as Chevron } from "@lucide/svelte";
-	import { type ID, type ProxyTag } from "$lib/models.svelte";
-	import type { Target, UserData } from "./DashBoard.svelte";
-	import { apply_query_tags, type QuerySettings } from "./query";
+	import type { Target } from "./DashBoard.svelte";
 	import { slide } from "svelte/transition";
 	import TagItem from "./TagItem.svelte";
+    import type { ProxyTag, UserInformation, ID } from "$lib/models/effective";
+    import { apply_tag_query, type QuerySettings } from "$lib/query/query";
 
     let {
         user_data,
@@ -12,17 +12,17 @@
         current_target,
         query
     }: {
-        user_data: UserData,
+        user_data: UserInformation,
         target: (target: Target) => void,
         current_target: Target,
         query: QuerySettings<ProxyTag>
     } = $props();
 
     function get_tag(tag: ID): ProxyTag {
-		return user_data.tags.find(t => t.id == tag)!;
+		return user_data.tags.find(t => t.id.equals(tag))!;
 	}
 
-    let processed_tag_groups = $derived(apply_query_tags(user_data.tags, user_data.proxies, query));
+    let processed_tag_groups = $derived(apply_tag_query(user_data.tags, user_data.relationships, query));
 </script>
 
 {#snippet tags_list(items: ProxyTag[])}

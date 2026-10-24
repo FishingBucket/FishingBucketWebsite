@@ -1,28 +1,36 @@
 <script module lang="ts">
     export enum Button {
-        OK, CANCEL, DELETE, CONFIRM, CLEAR, RESET
-    };
+        OK,
+        CANCEL,
+        DELETE,
+        CONFIRM,
+        CLEAR,
+        RESET,
+    }
 
     export enum Level {
-        INFO, WARNING, CAUTION, IMPORTANT
-    };
+        INFO,
+        WARNING,
+        CAUTION,
+        IMPORTANT,
+    }
 </script>
 
 <script lang="ts">
-	import type { Snippet } from "svelte";
+    import type { Snippet } from 'svelte';
 
     let {
         title,
         level,
         buttons,
         open = $bindable(),
-        children
+        children,
     }: {
-        title: string,
-        level: Level,
-        buttons: [Button, (self: HTMLDialogElement, close: () => void) => void][],
-        open: () => void,
-        children: Snippet
+        title: string;
+        level: Level;
+        buttons: [Button, (self: HTMLDialogElement, close: () => void) => void][];
+        open: () => void;
+        children: Snippet;
     } = $props();
 
     let self: HTMLDialogElement = $state()!;
@@ -39,29 +47,35 @@
     }
 </script>
 
-<dialog bind:this={self} oncancel={() => {
-    for (let [button, cb] of buttons) {
-        if (button == Button.CANCEL) {
-            cb(self, close);
+<dialog
+    bind:this={self}
+    oncancel={() => {
+        for (let [button, cb] of buttons) {
+            if (button == Button.CANCEL) {
+                cb(self, close);
+            }
         }
-    }
-}} style:border-color={
-    (() => {
+    }}
+    style:border-color={(() => {
         switch (level) {
             case Level.INFO:
-                return "var(--accent-info)";
+                return 'var(--accent-info)';
             case Level.WARNING:
-                return "var(--accent-warning)";
+                return 'var(--accent-warning)';
             case Level.CAUTION:
-                return "var(--accent-danger)";
+                return 'var(--accent-danger)';
             case Level.IMPORTANT:
-                return "var(--accent-purple)";
+                return 'var(--accent-purple)';
         }
-    })()
-} closedby="any">
+    })()}
+    closedby="any"
+>
     {#if opened}
         <div class="inner">
-            <div class="padded" style="background: var(--background-secondary-alt); border-radius: 0 0 10px 10px;">
+            <div
+                class="padded"
+                style="background: var(--background-secondary-alt); border-radius: 0 0 10px 10px;"
+            >
                 <h1 style="margin: 0;">{title}</h1>
             </div>
             <div class="padded" style="flex-grow: 1;">
@@ -75,7 +89,6 @@
                         class:primary={button == Button.CONFIRM || button == Button.OK}
                         class:danger={button == Button.DELETE || button == Button.RESET}
                         class:caution={button == Button.CLEAR}
-
                         onclick={() => cb(self, close)}
                         autofocus={index == 0}
                     >

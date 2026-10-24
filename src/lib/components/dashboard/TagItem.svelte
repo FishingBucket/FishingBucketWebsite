@@ -1,23 +1,26 @@
 <script lang="ts">
-	import { get_id_string, id_equals, type ProxyTag } from "$lib/models.svelte";
-	import type { Target } from "./DashBoard.svelte";
+    import type { ProxyTag } from '$lib/models/effective';
+    import type { Target } from './DashBoard.svelte';
 
     let {
         tag,
         onclick,
-        current_target
+        current_target,
     }: {
-        tag: ProxyTag,
-        onclick: (tag: ProxyTag) => void,
-        current_target: Target
+        tag: ProxyTag;
+        onclick: (tag: ProxyTag) => void;
+        current_target: Target;
     } = $props();
 </script>
 
-<button class="tag-item" aria-label={tag.name} onclick={() => onclick(tag)} class:selected={
-    current_target.type == 'tag' && id_equals(current_target.data.id, tag.id)
-}>
+<button
+    class="tag-item"
+    aria-label={tag.name}
+    onclick={() => onclick(tag)}
+    class:selected={current_target.type == 'tag' && current_target.data.id.equals(tag.id)}
+>
     <h2>{tag.name}</h2>
-    <h2 class="id monospace">{get_id_string(tag.id)}</h2>
+    <h2 class="id monospace">{tag.id}</h2>
 </button>
 
 <style>

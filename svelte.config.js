@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import path from "node:path";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -19,7 +20,10 @@ const config = {
 				include: ['/*'],
 				exclude: ['<all>']
 			}
-		})
+		}),
+        alias: {
+            "$config_public": path.resolve("./config_public.json")
+        }
 	},
 	vitePlugin: {
 		dynamicCompileOptions: ({ filename }) =>

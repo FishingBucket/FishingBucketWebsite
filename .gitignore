@@ -5,7 +5,10 @@ src/routes/terms/+page.svelte
 src/routes/privacy/+page.svelte
 src/routes/copyright/+page.svelte
 
-src/lib/config.json
+config*.json
+!config*.example.json
+!config*.schema.json
+
 
 # Output
 .output

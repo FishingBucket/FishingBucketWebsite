@@ -1,42 +1,27 @@
-# sv
+# FishingBucket Website
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/FishingBucket/FishingBucketWebsite)
+![GitHub contributors](https://img.shields.io/github/contributors/FishingBucket/FishingBucketWebsite)
+![GitHub License](https://img.shields.io/github/license/FishingBucket/FishingBucketWebsite)
+![GitHub repo size](https://img.shields.io/github/repo-size/FishingBucket/FishingBucketWebsite)
 
-## Creating a project
+![Fluxer](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.fluxer.app%2Fv1%2Finvites%2Ffishingbucket&query=%24.presence_count&suffix=%20online&logo=Fluxer&label=Fluxer&logoColor=4641D9&labelColor=white&color)
+![Discord](https://img.shields.io/discord/1478257699274621120?label=Discord&logo=discord&labelColor=white)
 
-If you're seeing this, you've probably already done this step. Congrats!
+FishingBucket is the next-generation of proxy services.
 
-```sh
-# create a new project
-npx sv create my-app
-```
+The website and dashboard to interact with FishingBucket, a Fluxer and Discord bot to forward messages into faux-profiles called "proxies", akin to Tupperbox and PluralKit.
 
-To recreate this project with the same configuration:
+## Self-Hosting
 
-```sh
-# recreate this project
-npx sv@0.12.8 create --template minimal --types ts --add prettier eslint sveltekit-adapter="adapter:auto" --install npm fishing_bucket_website
-```
+To self-host the website, ensure that you have [Node.js](https://nodejs.org) installed. Furthermore, obtain either [pnpm](https://pnpm.io/) or [npm](https://www.npmjs.com/) for dependency management.
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+To get started with self-hosting, install the dependencies of the project at the root:
+- With `npm`:
+    ```shell
+    npm install
+    ```
+- With `pnpm`:
+    ```shell
+    pnpm install
+    ```

@@ -42,5 +42,8 @@
 		"typescript-eslint": "^8.54.0",
 		"vite": "^8.2.1",
 		"wrangler": "^4.90.0"
+	},
+	"dependencies": {
+		"zod": "^4.6.5"
 	}
 }

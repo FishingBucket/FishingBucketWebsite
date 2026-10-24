@@ -1,33 +1,52 @@
 <script lang="ts">
-	import { as_normalized_proxy, get_id_string, id_equals, type ID, type Proxy, type ProxyTag } from "$lib/models.svelte";
-	import type { Target } from "./DashBoard.svelte";
+    import {
+        type ID,
+        type ProxyTag,
+        type Proxy,
+        type UserInformation,
+        proxy_get_effective_avatar_url,
+        NullID,
+    } from '$lib/models/effective';
+    import type { Target } from './DashBoard.svelte';
 
     let {
         proxy,
+        user_data,
         get_tag,
         onclick,
-        current_target
+        current_target,
     }: {
-        proxy: Proxy,
-        get_tag: (tag: ID) => ProxyTag,
-        onclick: (proxy: Proxy) => void,
-        current_target: Target
+        proxy: Proxy;
+        user_data: UserInformation;
+        get_tag: (tag: ID) => ProxyTag;
+        onclick: (proxy: Proxy) => void;
+        current_target: Target;
     } = $props();
 
-    let normalized = $derived(as_normalized_proxy(proxy));
+    let applied_tags = $derived(
+        user_data.relationships.find((r) => r.proxy.equals(proxy.id)) || {
+            proxy: proxy.id,
+            tags: [],
+        },
+    );
 </script>
 
-<button class="proxy-item" aria-label={normalized.effective_name} onclick={() => onclick(proxy)} class:selected={
-    current_target.type == 'proxy' && id_equals(current_target.data.id, proxy.id)
-}>
-    <img src={normalized.avatar_url} alt="proxy avatar" class="avatar">
+<button
+    class="proxy-item"
+    aria-label={proxy.effective_name}
+    onclick={() => onclick(proxy)}
+    class:selected={current_target.type == 'proxy' && current_target.data.id.equals(proxy.id)}
+>
+    <img src={proxy_get_effective_avatar_url(proxy)} alt="proxy avatar" class="avatar" />
     <div class="proxy-info">
-        <h2>{normalized.effective_name}</h2>
-        <h2 class="id monospace">{get_id_string(normalized.id)}</h2>
+        <h2>{proxy.effective_name}</h2>
+        <h2 class="id monospace">{proxy.id}</h2>
         <div class="tags-list">
             <!-- eslint-disable svelte/require-each-key -->
-            {#each normalized.tags as tag}
-                <span class="tag">{get_tag(tag).name}</span>
+            {#each applied_tags.tags as tag}
+                {#if !(tag instanceof NullID)}
+                    <span class="tag">{get_tag(tag).name}</span>
+                {/if}
             {/each}
         </div>
     </div>

@@ -1,10 +1,10 @@
 <script lang="ts">
     import { CircleChevronRight as Chevron } from "@lucide/svelte";
-	import { type ID, type ProxyTag, type Proxy } from "$lib/models.svelte";
-	import type { Target, UserData } from "./DashBoard.svelte";
 	import ProxyItem from "./ProxyItem.svelte";
-	import { apply_query_proxy, type QuerySettings } from "./query";
 	import { slide } from "svelte/transition";
+    import type { ID, ProxyTag, UserInformation, Proxy } from "$lib/models/effective";
+    import type { Target } from "./DashBoard.svelte";
+    import { apply_proxy_query, type QuerySettings } from "$lib/query/query";
 
     let {
         user_data,
@@ -12,26 +12,26 @@
         current_target,
         query
     }: {
-        user_data: UserData,
+        user_data: UserInformation,
         target: (target: Target) => void,
         current_target: Target,
         query: QuerySettings<Proxy>
     } = $props();
 
     function get_tag(tag: ID): ProxyTag {
-		return user_data.tags.find(t => t.id == tag)!;
+		return user_data.tags.find(t => t.id.equals(tag))!;
 	}
 
     function get_proxy(proxy: ID): Proxy {
-        return user_data.proxies.find(p => p.id == proxy)!;
+        return user_data.proxies.find(p => p.id.equals(proxy))!;
     }
 
-    let processed_proxy_groups = $derived(apply_query_proxy(user_data.proxies, query));
+    let processed_proxy_groups = $derived(apply_proxy_query(user_data.proxies, user_data.relationships, query));
 </script>
 
 {#snippet proxies_list(items: Proxy[])}
     {#each items as proxy, index2 (index2)}
-        <ProxyItem {proxy} {get_tag} onclick={(proxy: Proxy) => {
+        <ProxyItem {proxy} {get_tag} {user_data} onclick={(proxy: Proxy) => {
             target({
                 type: 'proxy',
                 data: get_proxy(proxy.id)

@@ -1,25 +1,26 @@
 <script lang="ts">
-	import { CircleX, Trash2 } from "@lucide/svelte";
-	import type { Target, UserData } from "../DashBoard.svelte";
-	import ProxyInspector from "./ProxyInspector.svelte";
-	import type { IEdit, Proxy, ProxyTag } from "$lib/models.svelte";
-	import TagInspector from "./TagInspector.svelte";
-	import Dialog, { Button, Level } from "$lib/components/Dialog.svelte";
+    import { CircleX, Trash2 } from '@lucide/svelte';
+    import type { Target } from '../DashBoard.svelte';
+    import ProxyInspector from './ProxyInspector.svelte';
+    import TagInspector from './TagInspector.svelte';
+    import Dialog, { Button, Level } from '$lib/components/ui/Dialog.svelte';
+    import type { Edits } from '$lib/models/edits';
+    import type { Proxy, ProxyTag, UserInformation } from '$lib/models/effective';
 
     let {
-        current_target,
+        current_target = $bindable(),
         target,
-        add_edit,
+        edits,
         delete_proxy,
         delete_tag,
-        user_data
+        user_data = $bindable(),
     }: {
-        current_target: Target,
-        target: (target: Target) => void,
-        add_edit: (edit: IEdit) => void,
-        delete_proxy: (proxy: Proxy) => void,
-        delete_tag: (tag: ProxyTag) => void,
-        user_data: UserData
+        current_target: Target;
+        target: (target: Target) => void;
+        edits: Edits;
+        delete_proxy: (proxy: Proxy) => void;
+        delete_tag: (tag: ProxyTag) => void;
+        user_data: UserInformation;
     } = $props();
 
     function delete_current() {
@@ -35,16 +36,16 @@
         delete_current();
         target({
             type: null,
-            data: undefined
+            data: undefined,
         });
     }
 
     let delete_dialogs: {
-        proxy: () => void,
-        tag: () => void
+        proxy: () => void;
+        tag: () => void;
     } = $state({
         proxy: undefined!,
-        tag: undefined!
+        tag: undefined!,
     });
 </script>
 
@@ -53,7 +54,7 @@
     level={Level.CAUTION}
     buttons={[
         [Button.CANCEL, (_, close) => close()],
-        [Button.DELETE, confirm_delete]
+        [Button.DELETE, confirm_delete],
     ]}
     bind:open={delete_dialogs.proxy}
 >
@@ -67,12 +68,13 @@
     level={Level.CAUTION}
     buttons={[
         [Button.CANCEL, (_, close) => close()],
-        [Button.DELETE, confirm_delete]
+        [Button.DELETE, confirm_delete],
     ]}
     bind:open={delete_dialogs.tag}
 >
     <p>
-        Are you sure you want to delete this tag? This deletion will cascade into all proxies with this tag! This action is <strong>irreversible</strong>!
+        Are you sure you want to delete this tag? This deletion will cascade into all proxies with
+        this tag! This action is <strong>irreversible</strong>!
     </p>
 </Dialog>
 
@@ -85,29 +87,40 @@
                 {:else if current_target.type == 'proxy'}
                     Proxy
                 {/if}
-                <button class="neutered-button" style="position: absolute; top: 5px; left: 5px;" onclick={() => {
-                    target({
-                        type: null,
-                        data: undefined
-                    });
-                }} aria-label="close inspector">
+                <button
+                    class="neutered-button"
+                    style="position: absolute; top: 5px; left: 5px;"
+                    onclick={() => {
+                        target({
+                            type: null,
+                            data: undefined,
+                        });
+                    }}
+                    aria-label="close inspector"
+                >
                     <CircleX></CircleX>
                 </button>
-                <button class="neutered-button" style="position: absolute; top: 5px; right: 5px; color: var(--accent-danger);" onclick={() => {
-                    if (current_target.type == 'proxy') {
-                        delete_dialogs.proxy();
-                    } else {
-                        delete_dialogs.tag();
-                    }
-                }} aria-label="delete item">
+                <button
+                    class="neutered-button"
+                    style="position: absolute; top: 5px; right: 5px; color: var(--accent-danger);"
+                    onclick={() => {
+                        if (current_target.type == 'proxy') {
+                            delete_dialogs.proxy();
+                        } else {
+                            delete_dialogs.tag();
+                        }
+                    }}
+                    aria-label="delete item"
+                >
                     <Trash2></Trash2>
                 </button>
             </p>
             <div style="padding: 10px;">
                 {#if current_target.type == 'tag'}
-                    <TagInspector tag={current_target.data} {add_edit}></TagInspector>
+                    <TagInspector tag={current_target.data} {edits}></TagInspector>
                 {:else if current_target.type == 'proxy'}
-                    <ProxyInspector proxy={current_target.data} {add_edit} {user_data} {target}></ProxyInspector>
+                    <ProxyInspector bind:proxy={current_target.data} {edits} bind:user_data {target}
+                    ></ProxyInspector>
                 {/if}
             </div>
         </div>

@@ -1,45 +1,51 @@
 <script lang="ts">
-	import { EditProxyTagFieldEdit, get_id_string, type IEdit, type ProxyTag } from "$lib/models.svelte";
-	import FieldGroup from "./FieldGroup.svelte";
+    import type { ProxyTag } from '$lib/models/effective';
+    import { EditProxyTagEdit, type Edits } from '$lib/models/edits';
+    import FieldGroup from './FieldGroup.svelte';
 
     let {
         tag,
-        add_edit,
+        edits,
     }: {
-        tag: ProxyTag,
-        add_edit: (edit: IEdit) => void
+        tag: ProxyTag;
+        edits: Edits;
     } = $props();
+
+    function onblur() {
+        edits.add_edit(new EditProxyTagEdit(tag));
+    }
 </script>
 
 <div class="inspector">
-    <div class="row" style="flex-grow: 1; display: flex; gap: 10px; flex-direction: column; position: relative;">
+    <div
+        class="row"
+        style="flex-grow: 1; display: flex; gap: 10px; flex-direction: column; position: relative;"
+    >
         <h1 style="margin: 0;">{tag.name}</h1>
-        <button style="position: absolute; top: 0; right: 0;" onclick={() => {
-            navigator.clipboard.writeText(get_id_string(tag.id));
-        }}>
-            Copy ID: <span class="monospace" style="font-size: 1em;">{get_id_string(tag.id)}</span>
+        <button
+            style="position: absolute; top: 0; right: 0;"
+            onclick={() => {
+                navigator.clipboard.writeText(tag.id.toString());
+            }}
+        >
+            Copy ID: <span class="monospace" style="font-size: 1em;">{tag.id}</span>
         </button>
     </div>
     <FieldGroup title="Basic Information">
         <div class="field">
             <label for="name">Name:</label>
-            <input name="name" id="name" placeholder="Name" bind:value={
-                () => tag.name,
-                (v: string) => {
-                    tag.name = v;
-                    if (v) add_edit(new EditProxyTagFieldEdit(tag.id, 'name', v));
-                }
-            } class:error={!tag.name}>
+            <input
+                name="name"
+                id="name"
+                placeholder="Name"
+                bind:value={tag.name}
+                {onblur}
+                class:error={!tag.name}
+            />
         </div>
         <div class="field">
             <label for="marker">Marker:</label>
-            <input name="marker" id="marker" placeholder="Marker" bind:value={
-                () => tag.tag,
-                (v: string) => {
-                    tag.tag = v;
-                    add_edit(new EditProxyTagFieldEdit(tag.id, 'tag', v));
-                }
-            }>
+            <input name="marker" id="marker" placeholder="Marker" bind:value={tag.tag} {onblur} />
         </div>
         <div class="field">
             <p>Metadata:</p>
@@ -51,7 +57,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{new Intl.DateTimeFormat().format(new Date(tag.creation_date * 1000))}</td>
+                        <td
+                            >{new Intl.DateTimeFormat().format(
+                                new Date(tag.creation_date * 1000),
+                            )}</td
+                        >
                     </tr>
                 </tbody>
             </table>
@@ -59,13 +69,13 @@
     </FieldGroup>
     <div class="vfield">
         <label for="description">Description:</label>
-        <textarea name="description" id="description" placeholder="Description" bind:value={
-            () => tag.description,
-            (v: string) => {
-                tag.description = v;
-                add_edit(new EditProxyTagFieldEdit(tag.id, 'description', v));
-            }
-        }></textarea>
+        <textarea
+            name="description"
+            id="description"
+            placeholder="Description"
+            bind:value={tag.description}
+            {onblur}
+        ></textarea>
     </div>
 </div>
 
