@@ -1,0 +1,14 @@
+{
+    "$schema": "./config_public.json",
+	"api_url": "https://api.website.fish",
+    "name": "Instance Name",
+    "fluxer": {
+        "invite": "https://web.fluxer.app/oauth2/authorize?client_id=1501314428688998182&scope=bot&permissions=137976212560",
+        "guild": "https://fluxer.gg/iAcmPOrs"
+    },
+    "discord": {
+        "invite": "https://discord.com/oauth2/authorize?client_id=1557239904642138173&permissions=413122554944&integration_type=0&scope=bot",
+        "guild": "https://discord.gg/Oa4a12vSZ"
+    },
+	"github": "https://github.com/FishingBucket/FishingBucket"
+}
