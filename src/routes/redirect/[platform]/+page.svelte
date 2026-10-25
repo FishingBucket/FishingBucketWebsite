@@ -24,6 +24,7 @@
             }
             let redirect_url = page.url;
             redirect_url.searchParams.delete('code');
+            redirect_url.searchParams.delete('iss'); // this is from discord for some reason
             const response = await http.request<{
                 session_id: string;
                 user: FluxerUser | DiscordUser;
