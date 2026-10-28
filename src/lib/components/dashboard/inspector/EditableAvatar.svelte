@@ -2,6 +2,7 @@
     import { http, is_err } from '$lib/api.svelte';
     import ButtonedInput from '$lib/components/ui/ButtonedInput.svelte';
     import Dialog, { Button, Level } from '$lib/components/ui/Dialog.svelte';
+    import { CONFIG_PUBLIC } from '$lib/config';
     import { Routes } from '$lib/routes';
     import { Computer, ExternalLink, Link, SquarePen, Upload } from '@lucide/svelte';
 
@@ -128,37 +129,39 @@
                     buttons={[{ type: 'a', label: 'open URL', icon: ExternalLink, href: value }]}
                 ></ButtonedInput>
             </div>
-            <div style="grid-column: 2; grid-row: 2; position: relative;">
-                <input
-                    style="position: absolute; top: 0; left: 0; opacity: 0 !important; width: 100%;"
-                    tabindex="-1"
-                    type="file"
-                    bind:this={upload_button}
-                    accept="image/*"
-                    onchange={start_upload_file}
-                />
-                <button
-                    style="position: absolute; top: 0; left: 0; width: 100%;"
-                    onclick={() => {
-                        if (!upload_button) return;
+            {#if CONFIG_PUBLIC.s3}
+                <div style="grid-column: 2; grid-row: 2; position: relative;">
+                    <input
+                        style="position: absolute; top: 0; left: 0; opacity: 0 !important; width: 100%;"
+                        tabindex="-1"
+                        type="file"
+                        bind:this={upload_button}
+                        accept="image/*"
+                        onchange={start_upload_file}
+                    />
+                    <button
+                        style="position: absolute; top: 0; left: 0; width: 100%;"
+                        onclick={() => {
+                            if (!upload_button) return;
 
-                        upload_button.click();
+                            upload_button.click();
+                        }}
+                    >
+                        Upload From Computer
+                        <Computer></Computer>
+                    </button>
+                </div>
+                <button
+                    style="grid-column: 3; grid-row: 2;"
+                    onclick={() => {
+                        upload_from_url = value;
+                        set_as_upload_avatar_url(upload_from_url);
                     }}
                 >
-                    Upload From Computer
-                    <Computer></Computer>
+                    Upload From URL
+                    <Link></Link>
                 </button>
-            </div>
-            <button
-                style="grid-column: 3; grid-row: 2;"
-                onclick={() => {
-                    upload_from_url = value;
-                    set_as_upload_avatar_url(upload_from_url);
-                }}
-            >
-                Upload From URL
-                <Link></Link>
-            </button>
+            {/if}
         </div>
         {#if upload_from_url != undefined}
             <ButtonedInput
