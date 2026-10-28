@@ -57,13 +57,18 @@
             "type": "string",
             "format": "uri",
             "description": "The source code repository of the FishingBucket bot."
+        },
+        "s3": {
+            "type": "boolean",
+            "description": "Whether S3 is enabled for the API."
         }
     },
     "required": [
         "api_url",
         "name",
         "fluxer",
-        "github"
+        "github",
+        "s3"
     ],
     "additionalProperties": false
 }

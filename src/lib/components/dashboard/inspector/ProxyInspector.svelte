@@ -7,12 +7,13 @@
         type Proxy,
         type UserInformation,
     } from '$lib/models/effective';
-    import { ExternalLink, Plus, RotateCcw, SquarePen, X } from '@lucide/svelte';
+    import { Plus, RotateCcw, SquarePen, X } from '@lucide/svelte';
     import type { Target } from '../DashBoard.svelte';
     import FieldGroup from './FieldGroup.svelte';
     import { EditProxyEdit, SetRelationshipEdit, type Edits } from '$lib/models/edits';
     import ButtonedInput from '$lib/components/ui/ButtonedInput.svelte';
     import type { WireID } from '$lib/models/wire';
+    import EditableAvatar from './EditableAvatar.svelte';
 
     let {
         proxy = $bindable(),
@@ -129,22 +130,17 @@
         </div>
         <div class="field">
             <label for="avatar">Avatar:</label>
-            <img src={proxy.avatar_url} alt="proxy avatar" class="avatar small-avatar" />
-            <ButtonedInput
-                buttons={[
-                    {
-                        type: 'a',
-                        label: 'avatar url',
-                        icon: ExternalLink,
-                        href: proxy.avatar_url,
-                    },
-                ]}
-                id="avatar"
-                name="avatar"
-                placeholder="Avatar URL"
-                bind:value={proxy.avatar_url}
-                {onblur}
-            ></ButtonedInput>
+            <EditableAvatar
+                bind:value={
+                    () => proxy.avatar_url,
+                    (v: string) => {
+                        proxy.avatar_url = v;
+                        onblur();
+                    }
+                }
+                alt="proxy avatar"
+                size="big"
+            ></EditableAvatar>
         </div>
         <div class="field">
             <p>Metadata:</p>
@@ -277,6 +273,17 @@
                             bind:group={current_form.current_form}
                             value={form.key}
                         />
+                        <EditableAvatar
+                            bind:value={
+                                () => form.avatar_url,
+                                (v: string) => {
+                                    form.avatar_url = v;
+                                    onblur();
+                                }
+                            }
+                            alt="form avatar"
+                            size="small"
+                        ></EditableAvatar>
                         <ButtonedInput
                             id={`form-${index}-name`}
                             name={`form-${index}-name`}
@@ -298,30 +305,16 @@
                                 },
                             ]}
                         ></ButtonedInput>
-                        <span style="color: var(--text-primary);">=</span>
-                        <img src={form.avatar_url} alt="form avatar" class="avatar small-avatar" />
-                        <ButtonedInput
-                            buttons={[
-                                {
-                                    type: 'a',
-                                    label: 'form avatar url',
-                                    icon: ExternalLink,
-                                    href: form.avatar_url,
-                                },
-                            ]}
-                            id={`form-${index}-avatar`}
-                            name={`form-${index}-avatar`}
-                            placeholder="Form Avatar URL"
-                            bind:value={form.avatar_url}
-                            {onblur}
-                        ></ButtonedInput>
                     </div>
                 {/each}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%">
                     <button
                         aria-label="new form"
                         onclick={() => {
-                            proxy.forms.push({ key: '', avatar_url: proxy_get_random_avatar() });
+                            proxy.forms.push({
+                                key: 'form name',
+                                avatar_url: proxy_get_random_avatar(),
+                            });
                             proxy.forms = proxy.forms;
                         }}
                     >

@@ -10,5 +10,6 @@
         "invite": "https://discord.com/oauth2/authorize?client_id=1557239904642138173&permissions=413122554944&integration_type=0&scope=bot",
         "guild": "https://discord.gg/Oa4a12vSZ"
     },
-	"github": "https://github.com/FishingBucket/FishingBucket"
+	"github": "https://github.com/FishingBucket/FishingBucket",
+    "s3": false
 }

@@ -20,7 +20,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-        "script:generate-schema": "tsx scripts/generate_schema.ts"
+		"script:generate-schema": "tsx scripts/generate_schema.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
@@ -39,11 +39,11 @@
 		"prettier-plugin-svelte": "^3.4.1",
 		"svelte": "^5.56.8",
 		"svelte-check": "^4.7.5",
+		"tsx": "^4.23.15",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.54.0",
 		"vite": "^8.2.1",
-		"wrangler": "^4.90.0",
-		"tsx": "^4.23.15"
+		"wrangler": "^4.90.0"
 	},
 	"dependencies": {
 		"zod": "^4.6.5"

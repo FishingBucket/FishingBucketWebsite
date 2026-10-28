@@ -1,10 +1,14 @@
 export interface RouteInfo {
-    method: 'GET' | 'POST';
+    method: 'GET' | 'POST' | 'PUT';
     endpoint: string;
     require_auth: boolean;
 }
 
-function route(method: 'GET' | 'POST', endpoint: string, require_auth: boolean = true): RouteInfo {
+function route(
+    method: RouteInfo['method'],
+    endpoint: string,
+    require_auth: boolean = true,
+): RouteInfo {
     return {
         method,
         endpoint,
@@ -15,6 +19,7 @@ function route(method: 'GET' | 'POST', endpoint: string, require_auth: boolean =
 export const Routes = {
     INFO_ME: route('GET', '/info/@me'),
     EDIT: route('POST', '/edit'),
+    UPLOAD: route('POST', '/upload'),
     AUTH: {
         REDIRECT: (platform: string) => route('GET', `/auth/${platform}`, false),
         LOGIN: (platform: string) => route('POST', `/auth/${platform}/login`, false),

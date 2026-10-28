@@ -25,12 +25,14 @@
         buttons,
         open = $bindable(),
         children,
+        onclose,
     }: {
         title: string;
         level: Level;
         buttons: [Button, (self: HTMLDialogElement, close: () => void) => void][];
         open: () => void;
         children: Snippet;
+        onclose?: () => void;
     } = $props();
 
     let self: HTMLDialogElement = $state()!;
@@ -43,6 +45,7 @@
 
     function close() {
         self.close();
+        onclose?.();
         opened = false;
     }
 </script>
@@ -56,6 +59,7 @@
             }
         }
     }}
+    {onclose}
     style:border-color={(() => {
         switch (level) {
             case Level.INFO:

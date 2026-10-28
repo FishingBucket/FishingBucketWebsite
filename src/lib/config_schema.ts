@@ -11,4 +11,5 @@ export const ConfigPublicType = z.object({
     fluxer: PlatformConfig.describe('Information related to the Fluxer bot.'),
     discord: PlatformConfig.optional().describe('Information related to the Discord bot.'),
     github: z.httpUrl().describe('The source code repository of the FishingBucket bot.'),
+    s3: z.boolean().describe('Whether S3 is enabled for the API.'),
 });
